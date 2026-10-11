@@ -235,11 +235,17 @@ Save the actual screenshots in a folder named `screenshots` in the project root.
 
 ## 11. Design Decision
 
-I used an abstract `BaseEntity` class to provide a common validation contract and a reusable `to_dict()` method for both Reporter and Issue.
+-->I used an abstract `BaseEntity` class to provide a common validation contract and a reusable `to_dict()` method for both Reporter and Issue.
 
 I also used inheritance and method overriding for critical and low-priority issues so that each priority type can return a different description without duplicating the main issue implementation.
 
 JSON files were used for storage because the assignment focuses on OOP concepts, Django API development, and request handling.
+
+--> Class-Based API Views
+
+Instead of creating separate function-based views for each HTTP request, I used Django REST Framework's APIView classes to group related API operations together. For example, the get() and post() methods are defined within the same API view class.
+
+This approach keeps related request-handling logic organized in one place, makes the code easier to understand and maintain, and allows each class to handle multiple HTTP methods for the same resource.
 
 ## 12. Future Improvements
 
