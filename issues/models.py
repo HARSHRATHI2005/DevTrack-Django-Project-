@@ -1,0 +1,69 @@
+from django.db import models
+
+# Create your models here.
+from abc import ABC, abstractmethod
+
+class BaseEntity(ABC):
+    @abstractmethod
+    def validate(self):
+        pass
+
+    def to_dict(self):
+        return {
+            key: value
+            for key, value in self.__dict__.items()
+        }
+
+
+class Reporter(BaseEntity):
+    def __init__(self, id, name, email, team):
+        self.id = id
+        self.name = name
+        self.email = email
+        self.team = team
+
+    def validate(self):
+        if not self.name:
+            raise ValueError('Name cannot be empty')
+        if '@' not in self.email:
+            raise ValueError('Invalid email') 
+        if not self.team:
+            raise ValueError('Team cannot be empty')
+
+
+class Issue(BaseEntity):
+    def __init__(self, id, title, description, status, reporter):
+        self.id = id
+        self.title = title
+        self.description = description
+        self.status = status
+        self.reporter = reporter
+
+    def validate(self):
+        if not self.title:
+            raise ValueError('Title cannot be empty')
+        if not self.status:
+            raise ValueError('Status cannot be empty')
+        if not self.priority:
+            raise ValueError('Priority cannot be empty')  
+
+ALLOWED_STATUSES = ['open', 'in_progress', 'closed' , 'resolved' ]
+
+ALLOWED_PRIORITIES = ['low', 'medium', 'high' , 'critical']
+
+class CriticalIssue(Issue):
+     def describe(self):
+        return (
+            f"[URGENT] {self.title} — "
+            "needs immediate attention"
+        )
+
+
+class LowPriorityIssue(Issue):
+    def describe(self):
+        return (
+            f"[LOW PRIORITY] {self.title} — "
+            "can be addressed later"
+        )
+
+
